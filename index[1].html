@@ -1,0 +1,1839 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0EA5E9">
+    <meta name="description" content="Yoshlar uchun raqamli platformasi - Asilbek Maxsudov tomonidan ishlab chiqilgan">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="YDT">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192x192.png">
+    <link rel="apple-touch-icon" href="icon-192x192.png">
+    <title>Youth Digital Twin - Ultimate Platform 🚀</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0EA5E9;
+            --secondary: #7C3AED;
+            --dark: #0F172A;
+            --light: #F8FAFC;
+            --accent: #F59E0B;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #0EA5E9 0%, #7C3AED 100%);
+            --gradient-3: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        body.light-mode {
+            background: #F8FAFC;
+            color: #0F172A;
+        }
+
+        body.light-mode .bg-animation {
+            opacity: 0.05;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(14, 165, 233, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(124, 58, 237, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(245, 158, 11, 0.2) 0%, transparent 50%);
+            animation: bgShift 15s ease-in-out infinite alternate;
+        }
+
+        @keyframes bgShift {
+            0% { transform: scale(1) rotate(0deg); }
+            100% { transform: scale(1.1) rotate(5deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 10000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            animation: slideDown 0.8s ease-out;
+        }
+
+        body.light-mode nav {
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        nav .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Space Mono', monospace;
+            letter-spacing: -1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a, .nav-links button {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+        }
+
+        body.light-mode .nav-links a,
+        body.light-mode .nav-links button {
+            color: var(--dark);
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            background: var(--gradient-2);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(14, 165, 233, 0.4);
+        }
+
+        /* Landing Page */
+        .landing-hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 5% 4rem;
+            text-align: center;
+        }
+
+        .landing-content {
+            max-width: 900px;
+        }
+
+        .landing-content h1 {
+            font-size: 5rem;
+            font-weight: 900;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .landing-content p {
+            font-size: 1.5rem;
+            color: #94A3B8;
+            margin-bottom: 3rem;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        body.light-mode .landing-content p {
+            color: #64748B;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .btn {
+            padding: 1.2rem 3rem;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-primary {
+            background: var(--gradient-2);
+            color: white;
+            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(14, 165, 233, 0.6);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--light);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        body.light-mode .btn-secondary {
+            color: var(--dark);
+            border-color: rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+        }
+
+        /* Main Dashboard (hidden by default) */
+        #mainDashboard {
+            display: none;
+            padding-top: 5rem;
+        }
+
+        #mainDashboard.active {
+            display: block;
+        }
+
+        /* User Profile Section */
+        .user-profile-header {
+            background: var(--gradient-2);
+            padding: 3rem 5%;
+            margin-top: 5rem;
+            text-align: center;
+        }
+
+        body.light-mode .user-profile-header {
+            background: linear-gradient(135deg, #0EA5E9 0%, #7C3AED 100%);
+        }
+
+        .user-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid white;
+            margin: 0 auto 1rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .user-info h2 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .user-level {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+
+        .streak-counter {
+            margin-top: 1rem;
+            font-size: 1.2rem;
+            color: #FDE047;
+            font-weight: 700;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            max-width: 1400px;
+            margin: 3rem auto;
+            padding: 0 5%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .dashboard-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        body.light-mode .dashboard-card {
+            background: white;
+            border-color: rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .dashboard-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        /* Progress Bars */
+        .progress-container {
+            margin: 1.5rem 0;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: #94A3B8;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        body.light-mode .progress-bar {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-2);
+            border-radius: 10px;
+            transition: width 1s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Achievements/Badges */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .achievement-badge {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .achievement-badge.unlocked {
+            border-color: var(--accent);
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .achievement-badge.locked {
+            opacity: 0.3;
+            filter: grayscale(100%);
+        }
+
+        .achievement-badge:hover {
+            transform: scale(1.05);
+        }
+
+        .achievement-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .achievement-name {
+            font-size: 0.7rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .achievement-new {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: var(--danger);
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            animation: bounce 0.5s infinite alternate;
+        }
+
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-5px); }
+        }
+
+        /* Statistics Cards */
+        .stats-mini-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .stat-mini {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        body.light-mode .stat-mini {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .stat-mini-value {
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-mini-label {
+            font-size: 0.85rem;
+            color: #94A3B8;
+            margin-top: 0.3rem;
+        }
+
+        /* Calendar */
+        .calendar-wrapper {
+            margin-top: 1rem;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .calendar-month {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .calendar-nav button {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--light);
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        body.light-mode .calendar-nav button {
+            background: rgba(0, 0, 0, 0.1);
+            color: var(--dark);
+        }
+
+        .calendar-nav button:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+        }
+
+        .calendar-day-label {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #94A3B8;
+            padding: 0.5rem;
+            font-weight: 600;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        body.light-mode .calendar-day {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .calendar-day:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .calendar-day.has-event::after {
+            content: '';
+            position: absolute;
+            bottom: 3px;
+            width: 4px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        .calendar-day.today {
+            border: 2px solid var(--primary);
+            font-weight: 700;
+        }
+
+        /* Learning Resources */
+        .resource-list {
+            margin-top: 1rem;
+        }
+
+        .resource-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        body.light-mode .resource-item {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .resource-item:hover {
+            background: rgba(14, 165, 233, 0.1);
+            transform: translateX(5px);
+        }
+
+        .resource-icon {
+            font-size: 2rem;
+            width: 50px;
+            text-align: center;
+        }
+
+        .resource-info h4 {
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .resource-info p {
+            font-size: 0.85rem;
+            color: #94A3B8;
+        }
+
+        /* Goal Wizard Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 10001;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: #1E293B;
+            padding: 3rem;
+            border-radius: 24px;
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        body.light-mode .modal-content {
+            background: white;
+            color: var(--dark);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            color: #94A3B8;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--danger);
+            transform: rotate(90deg);
+        }
+
+        .modal h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #94A3B8;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--light);
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        body.light-mode .form-group input,
+        body.light-mode .form-group textarea,
+        body.light-mode .form-group select {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.1);
+            color: var(--dark);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(14, 165, 233, 0.1);
+        }
+
+        /* Notification Toast */
+        .notification-toast {
+            position: fixed;
+            top: 6rem;
+            right: 2rem;
+            background: linear-gradient(135deg, #10B981, #3B82F6);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 10002;
+            display: none;
+            align-items: center;
+            gap: 1rem;
+            animation: slideInRight 0.4s ease;
+            min-width: 300px;
+        }
+
+        .notification-toast.active {
+            display: flex;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .notification-icon {
+            font-size: 1.5rem;
+        }
+
+        .notification-close {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .notification-close:hover {
+            opacity: 1;
+        }
+
+        /* Level Up Animation */
+        .level-up-animation {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 24px;
+            text-align: center;
+            z-index: 10003;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .level-up-animation.active {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .level-up-number {
+            font-size: 8rem;
+            font-weight: 900;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+
+        /* Leaderboard */
+        .leaderboard-list {
+            margin-top: 1rem;
+        }
+
+        .leaderboard-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        body.light-mode .leaderboard-item {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .leaderboard-item:hover {
+            background: rgba(14, 165, 233, 0.1);
+            transform: translateX(5px);
+        }
+
+        .leaderboard-rank {
+            font-size: 1.5rem;
+            font-weight: 800;
+            width: 40px;
+            text-align: center;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .leaderboard-rank.top-1 {
+            color: gold;
+            font-size: 2rem;
+        }
+
+        .leaderboard-rank.top-2 {
+            color: silver;
+        }
+
+        .leaderboard-rank.top-3 {
+            color: #CD7F32;
+        }
+
+        .leaderboard-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .leaderboard-info {
+            flex: 1;
+        }
+
+        .leaderboard-name {
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+
+        .leaderboard-stats {
+            font-size: 0.85rem;
+            color: #94A3B8;
+        }
+
+        .leaderboard-score {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Certificate Generator */
+        .certificate-preview {
+            background: white;
+            padding: 3rem;
+            border-radius: 12px;
+            border: 3px solid var(--accent);
+            text-align: center;
+            margin-top: 1rem;
+            color: var(--dark);
+        }
+
+        .certificate-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 2rem;
+        }
+
+        .certificate-recipient {
+            font-size: 1.8rem;
+            margin: 2rem 0;
+            font-style: italic;
+        }
+
+        .certificate-description {
+            font-size: 1.2rem;
+            margin: 1.5rem 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .landing-content h1 {
+                font-size: 3rem;
+            }
+
+            .landing-content p {
+                font-size: 1.2rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Hide landing page when logged in */
+        body.logged-in .landing-hero {
+            display: none;
+        }
+
+        body.logged-in #mainDashboard {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <div class="logo">YDT 🚀</div>
+            <ul class="nav-links">
+                <li><button onclick="showSection('dashboard')">Dashboard</button></li>
+                <li><button onclick="showSection('goals')">Maqsadlar</button></li>
+                <li><button onclick="showSection('achievements')">Yutuqlar</button></li>
+                <li><button onclick="showSection('resources')">Resurslar</button></li>
+                <li><button class="theme-toggle" onclick="toggleTheme()"><span id="themeIcon">🌙</span> Tema</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Landing Page -->
+    <div class="landing-hero">
+        <div class="landing-content">
+            <h1>Youth Digital Twin 🚀</h1>
+            <p>Har bir yoshning raqamli rivojlanish xaritasi. Platformaga qo'shiling va o'z salohiyatingizni oching!</p>
+            <div class="cta-buttons">
+                <button class="btn btn-primary" onclick="showRegisterModal()">Ro'yxatdan o'tish</button>
+                <button class="btn btn-secondary" onclick="showLoginModal()">Kirish</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard (Hidden initially) -->
+    <div id="mainDashboard">
+        <!-- User Profile Header -->
+        <div class="user-profile-header">
+            <div class="user-avatar" onclick="showAvatarPicker()">
+                <span id="userAvatar">👤</span>
+            </div>
+            <div class="user-info">
+                <h2 id="userName">Foydalanuvchi</h2>
+                <div class="user-level">
+                    <span>⚡ Daraja: </span><span id="userLevel">1</span>
+                </div>
+                <div class="streak-counter">
+                    <span>🔥 Kunlik faollik: </span><span id="streakDays">0</span> kun
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Cards Grid -->
+        <div class="dashboard-grid">
+            <!-- Progress Card -->
+            <div class="dashboard-card">
+                <h3>📈 Rivojlanish</h3>
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>📚 Ilm</span>
+                        <span id="ilmProgress">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="ilmBar" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>🏃 Sport</span>
+                        <span id="sportProgress">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="sportBar" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>🎤 Ijtimoiy</span>
+                        <span id="socialProgress">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="socialBar" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>💡 Loyihalar</span>
+                        <span id="projectProgress">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="projectBar" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Card -->
+            <div class="dashboard-card">
+                <h3>📊 Statistika</h3>
+                <div class="stats-mini-grid">
+                    <div class="stat-mini">
+                        <div class="stat-mini-value" id="totalPoints">0</div>
+                        <div class="stat-mini-label">Umumiy ball</div>
+                    </div>
+                    <div class="stat-mini">
+                        <div class="stat-mini-value" id="rankPosition">#--</div>
+                        <div class="stat-mini-label">Reyting</div>
+                    </div>
+                    <div class="stat-mini">
+                        <div class="stat-mini-value" id="completedGoals">0</div>
+                        <div class="stat-mini-label">Maqsadlar</div>
+                    </div>
+                    <div class="stat-mini">
+                        <div class="stat-mini-value" id="achievementCount">0</div>
+                        <div class="stat-mini-label">Yutuqlar</div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="showGoalWizard()">
+                    🎯 Yangi maqsad qo'shish
+                </button>
+            </div>
+
+            <!-- Achievements Card -->
+            <div class="dashboard-card">
+                <h3>🏆 Yutuqlar</h3>
+                <div class="achievements-grid" id="achievementsGrid">
+                    <!-- Achievements will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Calendar Card -->
+            <div class="dashboard-card">
+                <h3>📅 Kalendar</h3>
+                <div class="calendar-wrapper">
+                    <div class="calendar-header">
+                        <div class="calendar-month" id="calendarMonth">Yanvar 2026</div>
+                        <div class="calendar-nav">
+                            <button onclick="previousMonth()">←</button>
+                            <button onclick="nextMonth()">→</button>
+                        </div>
+                    </div>
+                    <div class="calendar-grid" id="calendarGrid">
+                        <!-- Calendar will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Resources Card -->
+            <div class="dashboard-card">
+                <h3>🎓 O'quv resurslari</h3>
+                <div class="resource-list">
+                    <div class="resource-item" onclick="openResource('coursera')">
+                        <div class="resource-icon">📚</div>
+                        <div class="resource-info">
+                            <h4>Coursera</h4>
+                            <p>Bepul onlayn kurslar</p>
+                        </div>
+                    </div>
+                    <div class="resource-item" onclick="openResource('khan')">
+                        <div class="resource-icon">🎬</div>
+                        <div class="resource-info">
+                            <h4>Khan Academy</h4>
+                            <p>Video darsliklar</p>
+                        </div>
+                    </div>
+                    <div class="resource-item" onclick="openResource('books')">
+                        <div class="resource-icon">📖</div>
+                        <div class="resource-info">
+                            <h4>Kitoblar</h4>
+                            <p>Tavsiya etiladigan adabiyotlar</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leaderboard Card -->
+            <div class="dashboard-card">
+                <h3>🥇 Reyting</h3>
+                <div class="leaderboard-list" id="leaderboardList">
+                    <!-- Leaderboard will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registration Modal -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('registerModal')">×</button>
+            <h2>🚀 Ro'yxatdan o'tish</h2>
+            <form onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label>Ism</label>
+                    <input type="text" id="regName" required placeholder="To'liq ismingiz">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="regEmail" required placeholder="example@mail.com">
+                </div>
+                <div class="form-group">
+                    <label>Maktab</label>
+                    <input type="text" id="regSchool" required placeholder="Maktab nomi">
+                </div>
+                <div class="form-group">
+                    <label>Sinf</label>
+                    <select id="regGrade" required>
+                        <option value="">Tanlang</option>
+                        <option value="7">7-sinf</option>
+                        <option value="8">8-sinf</option>
+                        <option value="9">9-sinf</option>
+                        <option value="10">10-sinf</option>
+                        <option value="11">11-sinf</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Qiziqishlar (vergul bilan ajrating)</label>
+                    <input type="text" id="regInterests" placeholder="Matematika, Sport, Musiqa">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                    Ro'yxatdan o'tish
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('loginModal')">×</button>
+            <h2>🔐 Kirish</h2>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" required placeholder="example@mail.com">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                    Kirish
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Goal Wizard Modal -->
+    <div class="modal" id="goalWizardModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('goalWizardModal')">×</button>
+            <h2>🎯 Yangi maqsad belgilash</h2>
+            <form onsubmit="handleGoalCreate(event)">
+                <div class="form-group">
+                    <label>Maqsad nomi</label>
+                    <input type="text" id="goalTitle" required placeholder="Matematikadan 5 olish">
+                </div>
+                <div class="form-group">
+                    <label>Kategoriya</label>
+                    <select id="goalCategory" required>
+                        <option value="">Tanlang</option>
+                        <option value="ilm">📚 Ilm</option>
+                        <option value="sport">🏃 Sport</option>
+                        <option value="social">🎤 Ijtimoiy</option>
+                        <option value="project">💡 Loyiha</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Tavsif</label>
+                    <textarea id="goalDescription" rows="3" placeholder="Maqsadingiz haqida batafsil..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Muddat</label>
+                    <input type="date" id="goalDeadline" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                    Maqsad yaratish
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Avatar Picker Modal -->
+    <div class="modal" id="avatarPickerModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('avatarPickerModal')">×</button>
+            <h2>🎨 Avatar tanlang</h2>
+            <div class="achievements-grid" style="margin-top: 2rem;">
+                <div class="achievement-badge unlocked" onclick="selectAvatar('👤')">
+                    <div class="achievement-icon">👤</div>
+                </div>
+                <div class="achievement-badge unlocked" onclick="selectAvatar('👨‍🎓')">
+                    <div class="achievement-icon">👨‍🎓</div>
+                </div>
+                <div class="achievement-badge unlocked" onclick="selectAvatar('👩‍🎓')">
+                    <div class="achievement-icon">👩‍🎓</div>
+                </div>
+                <div class="achievement-badge unlocked" onclick="selectAvatar('🦸‍♂️')">
+                    <div class="achievement-icon">🦸‍♂️</div>
+                </div>
+                <div class="achievement-badge unlocked" onclick="selectAvatar('🦸‍♀️')">
+                    <div class="achievement-icon">🦸‍♀️</div>
+                </div>
+                <div class="achievement-badge unlocked" onclick="selectAvatar('🧑‍💻')">
+                    <div class="achievement-icon">🧑‍💻</div>
+                </div>
+                <div class="achievement-badge unlocked" onclick="selectAvatar('🧑‍🔬')">
+                    <div class="achievement-icon">🧑‍🔬</div>
+                </div>
+                <div class="achievement-badge unlocked" onclick="selectAvatar('🧑‍🎨')">
+                    <div class="achievement-icon">🧑‍🎨</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Certificate Modal -->
+    <div class="modal" id="certificateModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('certificateModal')">×</button>
+            <h2>🏅 Sertifikat yaratish</h2>
+            <div class="certificate-preview">
+                <div class="certificate-title">Muvaffaqiyat Sertifikati</div>
+                <div class="certificate-recipient">
+                    <strong id="certName">Foydalanuvchi</strong>
+                </div>
+                <div class="certificate-description">
+                    Youth Digital Twin platformasida <strong id="certAchievement">100 ball</strong> to'plash va 
+                    <strong id="certLevel">5-daraja</strong>ga erishish uchun
+                </div>
+                <div style="margin-top: 2rem; color: #64748B;">
+                    Sana: <span id="certDate">2026-02-18</span>
+                </div>
+            </div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;" onclick="downloadCertificate()">
+                📥 Yuklab olish
+            </button>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="notification-toast" id="notificationToast">
+        <div class="notification-icon">🎉</div>
+        <div class="notification-message" id="notificationMessage">Xabar</div>
+        <button class="notification-close" onclick="hideNotification()">×</button>
+    </div>
+
+    <!-- Level Up Animation -->
+    <div class="level-up-animation" id="levelUpAnimation">
+        <h2>DARAJA OSHDI! 🎉</h2>
+        <div class="level-up-number" id="newLevel">2</div>
+        <p style="font-size: 1.5rem; margin-top: 1rem;">Tabriklaymiz!</p>
+    </div>
+
+    <script>
+        // ============= DATA MANAGEMENT =============
+        let userData = {
+            name: '',
+            email: '',
+            school: '',
+            grade: '',
+            interests: '',
+            avatar: '👤',
+            level: 1,
+            xp: 0,
+            streak: 0,
+            lastActive: null,
+            stats: {
+                ilm: 0,
+                sport: 0,
+                social: 0,
+                project: 0,
+                total: 0
+            },
+            achievements: [],
+            goals: [],
+            events: []
+        };
+
+        // Achievements Database
+        const achievementsList = [
+            { id: 'first_login', icon: '🎯', name: 'Boshlang\'ich', description: 'Platformaga kirish', unlocked: false },
+            { id: 'set_goal', icon: '🎪', name: 'Rejachi', description: 'Birinchi maqsad', unlocked: false },
+            { id: 'week_streak', icon: '🔥', name: '7 kun', description: 'Bir hafta faol', unlocked: false },
+            { id: 'month_streak', icon: '⭐', name: '30 kun', description: 'Bir oy faol', unlocked: false },
+            { id: 'score_100', icon: '💯', name: 'Yuz ball', description: '100 ball to\'plash', unlocked: false },
+            { id: 'score_500', icon: '🚀', name: 'Besh yuz', description: '500 ball to\'plash', unlocked: false },
+            { id: 'level_5', icon: '⚡', name: 'Daraja 5', description: '5-darajaga yetish', unlocked: false },
+            { id: 'level_10', icon: '👑', name: 'Daraja 10', description: '10-darajaga yetish', unlocked: false }
+        ];
+
+        // Sample Leaderboard Data
+        const leaderboardData = [
+            { rank: 1, name: 'Aziz Abdullayev', avatar: '👨‍🎓', score: 2450, school: '15-maktab' },
+            { rank: 2, name: 'Dilnoza Karimova', avatar: '👩‍🎓', score: 2380, school: '7-maktab' },
+            { rank: 3, name: 'Jasur Rahimov', avatar: '🦸‍♂️', score: 2210, school: '23-maktab' },
+            { rank: 4, name: 'Malika Toshmatova', avatar: '👩‍💻', score: 2105, school: '11-maktab' },
+            { rank: 5, name: 'Sardor Ergashev', avatar: '🧑‍🔬', score: 1890, school: '5-maktab' }
+        ];
+
+        // ============= INITIALIZATION =============
+        window.onload = function() {
+            loadUserData();
+            initializeCalendar();
+            initializeAchievements();
+            initializeLeaderboard();
+            checkStreak();
+        };
+
+        function loadUserData() {
+            const saved = localStorage.getItem('ydt_user');
+            if (saved) {
+                userData = JSON.parse(saved);
+                document.body.classList.add('logged-in');
+                updateUI();
+            }
+        }
+
+        function saveUserData() {
+            localStorage.setItem('ydt_user', JSON.stringify(userData));
+        }
+
+        // ============= AUTHENTICATION =============
+        function showRegisterModal() {
+            document.getElementById('registerModal').classList.add('active');
+        }
+
+        function showLoginModal() {
+            document.getElementById('loginModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function handleRegister(event) {
+            event.preventDefault();
+            
+            userData.name = document.getElementById('regName').value;
+            userData.email = document.getElementById('regEmail').value;
+            userData.school = document.getElementById('regSchool').value;
+            userData.grade = document.getElementById('regGrade').value;
+            userData.interests = document.getElementById('regInterests').value;
+            userData.lastActive = new Date().toISOString();
+            userData.streak = 1;
+            
+            unlockAchievement('first_login');
+            saveUserData();
+            
+            document.body.classList.add('logged-in');
+            closeModal('registerModal');
+            updateUI();
+            showNotification('🎉 Xush kelibsiz, ' + userData.name + '!');
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            // Simplified login - just for demo
+            const email = document.getElementById('loginEmail').value;
+            const saved = localStorage.getItem('ydt_user');
+            
+            if (saved) {
+                userData = JSON.parse(saved);
+                document.body.classList.add('logged-in');
+                updateUI();
+                closeModal('loginModal');
+                showNotification('👋 Xush kelibsiz, ' + userData.name + '!');
+            } else {
+                showNotification('⚠️ Avval ro\'yxatdan o\'ting');
+            }
+        }
+
+        // ============= UI UPDATES =============
+        function updateUI() {
+            document.getElementById('userName').textContent = userData.name;
+            document.getElementById('userAvatar').textContent = userData.avatar;
+            document.getElementById('userLevel').textContent = userData.level;
+            document.getElementById('streakDays').textContent = userData.streak;
+            
+            // Update progress bars
+            updateProgressBar('ilm', userData.stats.ilm);
+            updateProgressBar('sport', userData.stats.sport);
+            updateProgressBar('social', userData.stats.social);
+            updateProgressBar('project', userData.stats.project);
+            
+            // Update stats
+            document.getElementById('totalPoints').textContent = userData.stats.total;
+            document.getElementById('completedGoals').textContent = userData.goals.filter(g => g.completed).length;
+            document.getElementById('achievementCount').textContent = userData.achievements.length;
+            
+            updateAchievements();
+        }
+
+        function updateProgressBar(category, value) {
+            const maxValue = 1000;
+            const percentage = Math.min((value / maxValue) * 100, 100);
+            document.getElementById(category + 'Bar').style.width = percentage + '%';
+            document.getElementById(category + 'Progress').textContent = Math.round(percentage) + '%';
+        }
+
+        // ============= THEME TOGGLE =============
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const icon = document.getElementById('themeIcon');
+            icon.textContent = document.body.classList.contains('light-mode') ? '☀️' : '🌙';
+            
+            const theme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
+            localStorage.setItem('ydt_theme', theme);
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('ydt_theme');
+        if (savedTheme === 'light') {
+            document.body.classList.add('light-mode');
+            document.getElementById('themeIcon').textContent = '☀️';
+        }
+
+        // ============= ACHIEVEMENTS =============
+        function initializeAchievements() {
+            const grid = document.getElementById('achievementsGrid');
+            grid.innerHTML = '';
+            
+            achievementsList.forEach(achievement => {
+                const isUnlocked = userData.achievements.includes(achievement.id);
+                const badge = document.createElement('div');
+                badge.className = 'achievement-badge ' + (isUnlocked ? 'unlocked' : 'locked');
+                badge.title = achievement.description;
+                badge.innerHTML = `
+                    <div class="achievement-icon">${achievement.icon}</div>
+                    <div class="achievement-name">${achievement.name}</div>
+                `;
+                grid.appendChild(badge);
+            });
+        }
+
+        function updateAchievements() {
+            initializeAchievements();
+        }
+
+        function unlockAchievement(achievementId) {
+            if (!userData.achievements.includes(achievementId)) {
+                userData.achievements.push(achievementId);
+                const achievement = achievementsList.find(a => a.id === achievementId);
+                showNotification('🏆 Yangi yutuq: ' + achievement.name);
+                addXP(50);
+                saveUserData();
+                updateAchievements();
+            }
+        }
+
+        // ============= XP & LEVELING =============
+        function addXP(amount) {
+            userData.xp += amount;
+            const xpForNextLevel = userData.level * 100;
+            
+            if (userData.xp >= xpForNextLevel) {
+                userData.level++;
+                userData.xp = userData.xp - xpForNextLevel;
+                showLevelUp(userData.level);
+                
+                // Check level achievements
+                if (userData.level === 5) unlockAchievement('level_5');
+                if (userData.level === 10) unlockAchievement('level_10');
+            }
+            
+            saveUserData();
+            updateUI();
+        }
+
+        function showLevelUp(level) {
+            const animation = document.getElementById('levelUpAnimation');
+            document.getElementById('newLevel').textContent = level;
+            animation.classList.add('active');
+            
+            setTimeout(() => {
+                animation.classList.remove('active');
+            }, 3000);
+        }
+
+        // ============= STREAK SYSTEM =============
+        function checkStreak() {
+            if (!userData.lastActive) return;
+            
+            const lastActive = new Date(userData.lastActive);
+            const today = new Date();
+            const diffTime = Math.abs(today - lastActive);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 0) {
+                // Same day, do nothing
+            } else if (diffDays === 1) {
+                // Next day, increase streak
+                userData.streak++;
+                if (userData.streak === 7) unlockAchievement('week_streak');
+                if (userData.streak === 30) unlockAchievement('month_streak');
+            } else {
+                // Streak broken
+                userData.streak = 1;
+            }
+            
+            userData.lastActive = today.toISOString();
+            saveUserData();
+            updateUI();
+        }
+
+        // ============= GOALS =============
+        function showGoalWizard() {
+            document.getElementById('goalWizardModal').classList.add('active');
+        }
+
+        function handleGoalCreate(event) {
+            event.preventDefault();
+            
+            const goal = {
+                id: Date.now(),
+                title: document.getElementById('goalTitle').value,
+                category: document.getElementById('goalCategory').value,
+                description: document.getElementById('goalDescription').value,
+                deadline: document.getElementById('goalDeadline').value,
+                completed: false,
+                createdAt: new Date().toISOString()
+            };
+            
+            userData.goals.push(goal);
+            unlockAchievement('set_goal');
+            addXP(30);
+            
+            saveUserData();
+            closeModal('goalWizardModal');
+            showNotification('✅ Yangi maqsad qo\'shildi!');
+            
+            // Clear form
+            document.getElementById('goalTitle').value = '';
+            document.getElementById('goalCategory').value = '';
+            document.getElementById('goalDescription').value = '';
+            document.getElementById('goalDeadline').value = '';
+        }
+
+        // ============= CALENDAR =============
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+
+        function initializeCalendar() {
+            renderCalendar();
+        }
+
+        function renderCalendar() {
+            const monthNames = ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun', 
+                                'Iyul', 'Avgust', 'Sentabr', 'Oktabr', 'Noyabr', 'Dekabr'];
+            
+            document.getElementById('calendarMonth').textContent = monthNames[currentMonth] + ' ' + currentYear;
+            
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+            
+            // Day labels
+            const dayLabels = ['Du', 'Se', 'Ch', 'Pa', 'Ju', 'Sh', 'Ya'];
+            dayLabels.forEach(label => {
+                const dayLabel = document.createElement('div');
+                dayLabel.className = 'calendar-day-label';
+                dayLabel.textContent = label;
+                grid.appendChild(dayLabel);
+            });
+            
+            // Get first day and days in month
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const today = new Date();
+            
+            // Empty cells before first day
+            const startDay = firstDay === 0 ? 6 : firstDay - 1;
+            for (let i = 0; i < startDay; i++) {
+                grid.appendChild(document.createElement('div'));
+            }
+            
+            // Days
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayCell = document.createElement('div');
+                dayCell.className = 'calendar-day';
+                dayCell.textContent = day;
+                
+                // Mark today
+                if (day === today.getDate() && 
+                    currentMonth === today.getMonth() && 
+                    currentYear === today.getFullYear()) {
+                    dayCell.classList.add('today');
+                }
+                
+                // Check for events (simplified)
+                if (Math.random() > 0.8) {
+                    dayCell.classList.add('has-event');
+                }
+                
+                grid.appendChild(dayCell);
+            }
+        }
+
+        function previousMonth() {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar();
+        }
+
+        // ============= LEADERBOARD =============
+        function initializeLeaderboard() {
+            const list = document.getElementById('leaderboardList');
+            list.innerHTML = '';
+            
+            leaderboardData.forEach(user => {
+                const item = document.createElement('div');
+                item.className = 'leaderboard-item';
+                item.innerHTML = `
+                    <div class="leaderboard-rank top-${user.rank}">${user.rank}</div>
+                    <div class="leaderboard-avatar">${user.avatar}</div>
+                    <div class="leaderboard-info">
+                        <div class="leaderboard-name">${user.name}</div>
+                        <div class="leaderboard-stats">${user.school}</div>
+                    </div>
+                    <div class="leaderboard-score">${user.score}</div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        // ============= AVATAR PICKER =============
+        function showAvatarPicker() {
+            document.getElementById('avatarPickerModal').classList.add('active');
+        }
+
+        function selectAvatar(emoji) {
+            userData.avatar = emoji;
+            document.getElementById('userAvatar').textContent = emoji;
+            saveUserData();
+            closeModal('avatarPickerModal');
+            showNotification('✅ Avatar o\'zgartirildi!');
+        }
+
+        // ============= RESOURCES =============
+        function openResource(type) {
+            const urls = {
+                'coursera': 'https://www.coursera.org',
+                'khan': 'https://www.khanacademy.org',
+                'books': '#'
+            };
+            
+            if (urls[type] !== '#') {
+                window.open(urls[type], '_blank');
+            }
+            showNotification('📚 Resurs ochilmoqda...');
+        }
+
+        // ============= NOTIFICATIONS =============
+        function showNotification(message) {
+            const toast = document.getElementById('notificationToast');
+            document.getElementById('notificationMessage').textContent = message;
+            toast.classList.add('active');
+            
+            setTimeout(() => {
+                hideNotification();
+            }, 5000);
+        }
+
+        function hideNotification() {
+            document.getElementById('notificationToast').classList.remove('active');
+        }
+
+        // ============= CERTIFICATE =============
+        function showCertificate() {
+            document.getElementById('certName').textContent = userData.name;
+            document.getElementById('certAchievement').textContent = userData.stats.total + ' ball';
+            document.getElementById('certLevel').textContent = userData.level + '-daraja';
+            document.getElementById('certDate').textContent = new Date().toLocaleDateString('uz-UZ');
+            document.getElementById('certificateModal').classList.add('active');
+        }
+
+        function downloadCertificate() {
+            showNotification('📥 Sertifikat yuklanmoqda...');
+            // In a real app, this would generate a PDF
+            setTimeout(() => {
+                showNotification('✅ Sertifikat tayyor!');
+            }, 1500);
+        }
+
+        // ============= DEMO DATA =============
+        function addDemoProgress() {
+            // Add some demo progress
+            userData.stats.ilm = Math.floor(Math.random() * 500) + 200;
+            userData.stats.sport = Math.floor(Math.random() * 300) + 100;
+            userData.stats.social = Math.floor(Math.random() * 400) + 150;
+            userData.stats.project = Math.floor(Math.random() * 350) + 120;
+            userData.stats.total = userData.stats.ilm + userData.stats.sport + 
+                                   userData.stats.social + userData.stats.project;
+            
+            // Check score achievements
+            if (userData.stats.total >= 100) unlockAchievement('score_100');
+            if (userData.stats.total >= 500) unlockAchievement('score_500');
+            
+            saveUserData();
+            updateUI();
+        }
+
+        // Auto-add demo progress after login (for demonstration)
+        setTimeout(() => {
+            if (userData.name && userData.stats.total === 0) {
+                addDemoProgress();
+            }
+        }, 2000);
+
+        // ============= PWA - SERVICE WORKER =============
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('✅ PWA: Service Worker ro\'yxatdan o\'tdi!', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('❌ PWA: Service Worker xatosi:', error);
+                    });
+            });
+        }
+
+        // O'rnatish tugmasi
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // O'rnatish tugmasini ko'rsatish
+            const installBtn = document.createElement('button');
+            installBtn.innerHTML = '📱 Ilovani O\'rnatish';
+            installBtn.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #0EA5E9 0%, #7C3AED 100%);
+                color: white;
+                border: none;
+                padding: 15px 25px;
+                border-radius: 50px;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                box-shadow: 0 10px 30px rgba(14, 165, 233, 0.3);
+                z-index: 10001;
+                animation: pulse 2s infinite;
+            `;
+            
+            installBtn.addEventListener('click', async () => {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log('O\'rnatish natijasi:', outcome);
+                deferredPrompt = null;
+                installBtn.remove();
+            });
+            
+            document.body.appendChild(installBtn);
+        });
+
+        // O'rnatilgandan keyin
+        window.addEventListener('appinstalled', () => {
+            console.log('✅ Ilova muvaffaqiyatli o\'rnatildi!');
+            deferredPrompt = null;
+        });
+    </script>
+</body>
+</html>
